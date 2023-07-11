@@ -1,0 +1,102 @@
+.login {
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Lato,sans-serif;
+  background-color: #f8f9fd;
+  background-size: cover;
+  background-position: center;
+  margin: -8px;
+  
+}
+
+input[type="email" i] {
+  padding: 4px;
+}
+
+input[type="text"]{
+    height: 25px;
+    width: 40vh;
+    
+    border: 1px solid grey;
+    color: #6a3818;
+    
+}
+input[type="password"] {
+  height: 25px;
+  border: 1px solid grey;
+}
+
+input[type="submit"] {
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  background-color: #DC3545;
+  border-color: #c00113;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+input[type="submit"]:hover {
+  background: #c00113;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  background-color: white;
+  padding: 2rem;
+  box-shadow: 0 2px 2px 2px #ccc;
+  padding-left: 50px;
+  padding-right: 50px;
+  /* background-image: url("D:\react proj\Chef Finder\Day 3\chef_finder\public\cutting board.jpg"); */
+}
+
+.list-container {
+  display: flex;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.title {
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+.input-container1 {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 10px;
+  color: #442210;
+  font-size: 20px;
+}
+
+.input-container2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+  color: #e5b57d;
+  font-size: 20px;
+}
+.register{
+  text-align: center;
+  color: #e5b57d;
+  margin-top: 5px;
+
+}
+a{
+color: black;
+/* margin-left: px; */
+text-align: center;
+}
