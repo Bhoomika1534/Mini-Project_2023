@@ -1,0 +1,382 @@
+import React, { useState,useEffect  } from "react";
+import { BsCheckCircleFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import { logoLight } from "../../assets/images";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+
+const SignUp = () => {
+  // ============= Initial State Start here =============
+  const [name, setname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [zip, setZip] = useState("");
+  const [checked, setChecked] = useState(false);
+  // ============= Initial State End here ===============
+  // ============= Error Msg Start here =================
+  const [errname, setErrname] = useState("");
+  const [errEmail, setErrEmail] = useState("");
+  const [errPhone, setErrPhone] = useState("");
+  const [errPassword, setErrPassword] = useState("");
+  const [errAddress, setErrAddress] = useState("");
+  const [errCity, setErrCity] = useState("");
+  const [errCountry, setErrCountry] = useState("");
+  const [errZip, setErrZip] = useState("");
+  // ============= Error Msg End here ===================
+  const [successMsg, setSuccessMsg] = useState("");
+  // ============= Event Handler Start here =============
+
+  const navigate = useNavigate();
+  const [details,setDetails] = useState([]);
+  useEffect(()=>{
+      fetchData();
+  },[]);
+
+  const fetchData = async () => {
+    const data = {
+        name: name,
+        gmail: email,
+        password: password,
+        mobno: phone,
+    }
+    try {
+        const response = await axios.post("http://127.0.0.1:8181/api/v1/auth/register", data);
+
+        setDetails(response.data);
+        console.log(response);
+    }
+    catch (error) {
+        console.log("error fetching data");
+    }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8181/api/v1/auth/register",
+      {
+        name:name,
+        gmail: email,
+        mobno: phone,
+        password: password,
+      }
+    );
+
+    if (response.status === 200) {
+      navigate("/signin");
+      setname("");
+      setPhone("");
+      setEmail("");
+      setPassword("");
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+  }
+};
+
+const isStrongPassword = (password) => {
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()]/.test(password);
+
+  return (
+    password.length >= minLength &&
+    hasUpperCase &&
+    hasLowerCase &&
+    hasNumber &&
+    hasSpecialChar
+  );
+};
+
+  const handleName = (e) => {
+    setname(e.target.value);
+    setErrname("");
+  };
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setErrEmail("");
+  };
+  const handlePhone = (e) => {
+    setPhone(e.target.value);
+    setErrPhone("");
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    setErrPassword("");
+  };
+  const handleAddress = (e) => {
+    setAddress(e.target.value);
+    setErrAddress("");
+  };
+  const handleCity = (e) => {
+    setCity(e.target.value);
+    setErrCity("");
+  };
+  const handleCountry = (e) => {
+    setCountry(e.target.value);
+    setErrCountry("");
+  };
+  const handleZip = (e) => {
+    setZip(e.target.value);
+    setErrZip("");
+  };
+  // ============= Event Handler End here ===============
+  // ================= Email Validation start here =============
+  const EmailValidation = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
+  };
+  // ================= Email Validation End here ===============
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    if (checked) {
+      if (!name) {
+        setErrname("Enter your name");
+      }
+      if (!email) {
+        setErrEmail("Enter your email");
+      } else {
+        if (!EmailValidation(email)) {
+          setErrEmail("Enter a Valid email");
+        }
+      }
+      if (!phone) {
+        setErrPhone("Enter your phone number");
+      }
+      if (!password) {
+        setErrPassword("Create a password");
+      } else {
+        if (password.length < 6) {
+          setErrPassword("Passwords must be at least 6 characters");
+        }
+      }
+      if (!address) {
+        setErrAddress("Enter your address");
+      }
+      // ============== Getting the value ==============
+      if (
+        name &&
+        email &&
+        EmailValidation(email) &&
+        password &&
+        password.length >= 6 &&
+        address &&
+        city &&
+        country &&
+        zip
+      ) {
+        // setSuccessMsg(
+        //   `Hello dear ${name}, Welcome you to Admin panel. We received your Sign up request. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
+        // );
+        setname("");
+        setEmail("");
+        setPhone("");
+        setPassword("");
+        setAddress("");
+        setCity("");
+        setCountry("");
+        setZip("");
+      }
+    }
+  };
+  return (
+    <div className="w-full h-screen flex items-center justify-start">
+      <div className="w-1/2 hidden lgl:inline-flex h-full text-white">
+        <div className="w-[450px] h-full bg-primeColor px-10 flex flex-col gap-6 justify-center">
+          {/* <Link to="/">
+            <img src={logoLight} alt="logoImg" className="w-28" />
+          </Link> */}
+          <div className="flex flex-col gap-1 -mt-1">
+            <h1 className="font-titleFont text-xl font-medium">
+              Get started for free
+            </h1>
+            <p className="text-base">Create your account to access more</p>
+          </div>
+          <div className="w-[300px] flex items-start gap-3">
+            <span className="text-green-500 mt-1">
+              <BsCheckCircleFill />
+            </span>
+            <p className="text-base text-gray-300">
+              <span className="text-white font-semibold font-titleFont">
+              Experience the Future of Home Appliances
+              </span>
+              <br />
+              Discover the power of convenience and control with our cutting-edge Appliance App. Take charge of your home appliances like never before, making your life easier and more efficient.
+            </p>
+          </div>
+          <div className="w-[300px] flex items-start gap-3">
+            <span className="text-green-500 mt-1">
+              <BsCheckCircleFill />
+            </span>
+            <p className="text-base text-gray-300">
+              <span className="text-white font-semibold font-titleFont">
+              Support and Compatibility
+              </span>
+              <br />
+              Our app works seamlessly with a wide range of appliances, ensuring compatibility and excellent customer support.
+            </p>
+          </div>
+          <div className="w-[300px] flex items-start gap-3">
+            <span className="text-green-500 mt-1">
+              <BsCheckCircleFill />
+            </span>
+            <p className="text-base text-gray-300">
+              <span className="text-white font-semibold font-titleFont">
+              Intuitive and User-Friendly
+              </span>
+              <br />
+              Effortlessly navigate through our app, even if you're not tech-savvy.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="w-full lgl:w-[500px] h-full flex flex-col justify-center">
+        {successMsg ? (
+          <div className="w-[500px]">
+            <p className="w-full px-4 py-10 text-green-500 font-medium font-titleFont">
+              {successMsg}
+            </p>
+            <Link to="/signin">
+              <button
+                className="w-full h-10 bg-primeColor rounded-md text-gray-200 text-base font-titleFont font-semibold 
+            tracking-wide hover:bg-black hover:text-white duration-300"
+              >
+                Sign in
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <form className="w-full lgl:w-[500px] h-screen flex items-center justify-center" onSubmit={handleSubmit}>
+            <div className="px-6 py-4 w-full h-[96%] flex flex-col justify-start overflow-y-scroll scrollbar-thin scrollbar-thumb-primeColor">
+              <h1 className="font-titleFont underline underline-offset-4 decoration-[1px] font-semibold text-2xl mdl:text-3xl mb-4">
+                Create your account
+              </h1>
+              <div className="flex flex-col gap-3">
+                {/* client name */}
+                <div className="flex flex-col gap-.5">
+                  <p className="font-titleFont text-base font-semibold text-gray-600">
+                    Full Name
+                  </p>
+                  <input
+                    onChange={handleName}
+                    required value={name}
+                    className="w-full h-8 placeholder:text-sm placeholder:tracking-wide px-4 text-base font-medium placeholder:font-normal rounded-md border-[1px] border-gray-400 outline-none"
+                    type="text"
+                    placeholder="eg. John Doe"
+                  />
+                  {errname && (
+                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                      <span className="font-bold italic mr-1">!</span>
+                      {errname}
+                    </p>
+                  )}
+                </div>
+                {/* Email */}
+                <div className="flex flex-col gap-.5">
+                  <p className="font-titleFont text-base font-semibold text-gray-600">
+                    Email
+                  </p>
+                  <input
+                    onChange={handleEmail}
+                     required value={email}
+                    className="w-full h-8 placeholder:text-sm placeholder:tracking-wide px-4 text-base font-medium placeholder:font-normal rounded-md border-[1px] border-gray-400 outline-none"
+                    type="email"
+                    placeholder="john@workemail.com"
+                  />
+                  {errEmail && (
+                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                      <span className="font-bold italic mr-1">!</span>
+                      {errEmail}
+                    </p>
+                  )}
+                </div>
+                {/* Phone Number */}
+                <div className="flex flex-col gap-.5">
+                  <p className="font-titleFont text-base font-semibold text-gray-600">
+                    Phone Number
+                  </p>
+                  <input
+                    onChange={handlePhone}
+                    required value={phone}
+                    className="w-full h-8 placeholder:text-sm placeholder:tracking-wide px-4 text-base font-medium placeholder:font-normal rounded-md border-[1px] border-gray-400 outline-none"
+                    type="text"
+                    placeholder="008801234567891"
+                  />
+                  {errPhone && (
+                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                      <span className="font-bold italic mr-1">!</span>
+                      {errPhone}
+                    </p>
+                  )}
+                </div>
+                {/* Password */}
+                <div className="flex flex-col gap-.5">
+                  <p className="font-titleFont text-base font-semibold text-gray-600">
+                    Password
+                  </p>
+                  <input
+                    onChange={handlePassword}
+                    required value={password}
+                    className="w-full h-8 placeholder:text-sm placeholder:tracking-wide px-4 text-base font-medium placeholder:font-normal rounded-md border-[1px] border-gray-400 outline-none"
+                    type="password"
+                    placeholder="Create password"
+                  />
+                  {errPassword && (
+                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                      <span className="font-bold italic mr-1">!</span>
+                      {errPassword}
+                    </p>
+                  )}
+                </div>
+                {/* Checkbox */}
+                <div className="flex items-start mdl:items-center gap-2">
+                  <input
+                    onChange={() => setChecked(!checked)}
+                    className="w-4 h-4 mt-1 mdl:mt-0 cursor-pointer"
+                    type="checkbox"
+                  />
+                  <p className="text-sm text-primeColor">
+                    I agree to the {" "}
+                    <span className="text-blue-500">Terms of Service </span>and{" "}
+                    <span className="text-blue-500">Privacy Policy</span>.
+                  </p>
+                </div>
+               <button
+                  onSubmit={fetchData}
+                  className={`${
+                    checked
+                      ? "bg-primeColor hover:bg-black hover:text-white cursor-pointer"
+                      : "bg-gray-500 hover:bg-gray-500 hover:text-gray-200 cursor-none"
+                  } w-full text-gray-200 text-base font-medium h-10 rounded-md hover:text-white duration-300`}
+                >
+                  Create Account
+                </button>
+                <p className="text-sm text-center font-titleFont font-medium">
+                  Have an Account?{" "}
+                  <Link to="/signin">
+                    <span className="hover:text-blue-600 duration-300">
+                      Sign in
+                    </span>
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;
